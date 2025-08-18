@@ -175,11 +175,11 @@ def sugeno_rules(age_val, sugar_val, ldl_val, bmi_val, bp_val):
 
 # Evaluate
 input_vals = {
-    "age": 68,
-    "sugar": 145,
+    "age": 73,
+    "sugar": 89.31,
     "ldl": 170,
-    "bmi": 32,
-    "bp": 150
+    "bmi": 20.54,
+    "bp": 130
 }
 
 risk, rule_strengths = sugeno_rules(
