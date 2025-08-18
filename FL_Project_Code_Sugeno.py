@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # Define universe
 bmi = np.linspace(0,50,500)
@@ -194,3 +195,38 @@ print(f"📊 Risk Score: {risk:.2f}")
 print("🔍 Rule Firing Strengths:")
 for rule, strength in rule_strengths.items():
     print(f"  {rule}: {strength:.2f}")
+
+
+# Load CSV
+df = pd.read_csv("./Diabetes_Final_Data_V2.csv")
+
+#Converting gulucose level to mmol as per the fuzzy sets
+df["glucose_mmol"] = df["glucose"] * 18.008
+
+# Function to run fuzzy logic on whole dataset
+def evaluate_dataset(df):
+    results = []
+    for idx, row in df.iterrows():
+        age_val = row["age"]
+        sugar_val = row["glucose_mmol"] 
+        ldl_val = row.get("ldl", 120)     
+        bmi_val = row["bmi"]
+        bp_val = row["systolic_bp"]
+
+        risk_score, rule_strengths = sugeno_rules(age_val, sugar_val, ldl_val, bmi_val, bp_val)
+        results.append({
+            "index": idx,
+            "age": age_val,
+            "sugar_mmol": sugar_val,
+            "ldl": ldl_val,
+            "bmi": bmi_val,
+            "bp": bp_val,
+            "risk_score": risk_score
+        })
+    return pd.DataFrame(results)
+
+# Run evaluation
+results_df = evaluate_dataset(df)
+
+#Printing first few values
+print(results_df.head(18))
