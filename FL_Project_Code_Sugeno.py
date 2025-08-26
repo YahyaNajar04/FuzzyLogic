@@ -433,7 +433,8 @@ def evaluate_dataset(df):
             "bmi": bmi_val,
             "bp": bp_val,
             "risk_score": risk_score,
-            "rule_strengths": rule_strengths})
+            "rule_strengths": rule_strengths  # Optional: for deeper analysis
+        })
         if idx % 100 == 0:
             print(f"Processed {idx} rows...")
 
@@ -448,13 +449,14 @@ plt.ylabel("Risk Score")
 plt.title("Risk Score vs Age")
 plt.grid(True)
 plt.show()
-
-results_df.to_csv("risk_scores_output.csv", index=False)
+from datetime import datetime
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+filename = f"risk_scores_{timestamp}.csv"
+results_df.to_csv(filename, index=False)
 
 # ========= LOAD DATA =========
 # Change filename to your CSV path
-file_path = "risk_scores_output.csv"
-df = pd.read_csv(file_path)
+df = pd.read_csv(filename)
 
 # Expand rule strengths (convert string dicts into columns)
 df_rules = df.copy()
